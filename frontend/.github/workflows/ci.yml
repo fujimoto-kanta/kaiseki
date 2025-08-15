@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint-format-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. コード取得
+      - uses: actions/checkout@v4
+
+      # 2. Node.js のセットアップ
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. 依存インストール（package-lock.json 固定）
+      - run: npm ci
+
+      # 4. ESLint 実行
+      - run: npm run lint
+
+      # 5. Prettier チェック
+      - run: npm run format:check
+
+      # 6. Next.js ビルド
+      - run: npm run build
